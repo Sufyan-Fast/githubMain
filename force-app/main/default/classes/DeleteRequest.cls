@@ -9,7 +9,7 @@ public class DeleteRequest {
             res = http.send(req);
             System.debug('Response: ' + res.getBody());
         } catch (System.CalloutException e) {
-            // Handle exceptions
+            
             System.debug('Callout error: ' + e);
         }
     }
