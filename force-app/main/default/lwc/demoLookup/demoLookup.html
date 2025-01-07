@@ -1,0 +1,7 @@
+<template>
+    <h>Record id is {accountId}</h>
+    <c-reusable-lookup label="Contact" selected-icon-name="standard:contact" object-label="Contact"
+        object-api-name="Contact" field-api-name="Email" other-field-api-name="Name" account-id = {accountId}
+        onvalueselected={handleValueSelectedOnAccount}>
+    </c-reusable-lookup>
+</template>
