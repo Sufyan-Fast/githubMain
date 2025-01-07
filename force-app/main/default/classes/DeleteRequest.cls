@@ -7,7 +7,6 @@ public class DeleteRequest {
         HttpResponse res;
         try {
             res = http.send(req);
-            // Handle the response
             System.debug('Response: ' + res.getBody());
         } catch (System.CalloutException e) {
             // Handle exceptions
