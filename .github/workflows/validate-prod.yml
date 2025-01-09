@@ -37,3 +37,9 @@ jobs:
                 --username "${{ secrets.SF_CICD_USERNAME }}" 
                 --keyfile /home/runner/work/game-force/game-force/server.key 
                 --clientid ${{ secrets.SF_CLIENT_SECRET }}
+      # Pushing sourche to Scratch org
+      - name: Push source to Scratch Org
+        run: sf project deploy start
+      # Running tests to make sure nothing is broken 
+      - name: Run unit tests
+        run: sf apex run test --wait 30 --test-level RunAllTestsInOrg --code-coverage
