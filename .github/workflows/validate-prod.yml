@@ -1,19 +1,39 @@
-name: Validate Production Pull Request
-
-on:
+name: PR Checks
+run-name: Checks running whenever new PR is created
+on: 
   pull_request:
     branches:
-      - master
-    paths:
-      - 'force-app/**'
+      - dev
+      - main
+
 jobs:
-  validate:
+  build:
     runs-on: ubuntu-latest
-    environment: production
     steps:
+      # Checkout the Source code from the latest commit
       - uses: actions/checkout@v3
-      - name: Validate on ${{ vars.ENVIRONMENT_NAME }}
-        uses: jawills/sf-deploy@v1.0
         with:
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-          DRY_RUN: true
+          fetch-depth: 0
+      # We need to install NPM so that we can install SFDX CLI tools
+      - name: Install NPM
+        run: |
+          npm install  
+      # Isntalling SFDX CLI
+      - name: Install the SFDX CLI
+        run: |
+          npm install @salesforce/cli --global  
+      # We need to use a key value stored as GitHub secret and 
+      # create a .key file since 'sf org login jwt' command expects a path 
+      # to .key file as a parameter
+      - name: Create server key file
+        run: |
+          touch server.key
+          echo -e "${{ secrets.SF_CICD_SERVERKEY }}" >> server.key  
+      # Authorization with DevHub. Notice that all critical values are
+      # used from the GitHub secrets storage and aren't public
+      - name: Authorize DevHub
+        run: sf org login jwt --json --alias DevHub 
+                --set-default --set-default-dev-hub 
+                --username "${{ secrets.SF_CICD_USERNAME }}" 
+                --keyfile /home/runner/work/game-force/game-force/server.key 
+                --clientid ${{ secrets.SF_CLIENT_SECRET }}
