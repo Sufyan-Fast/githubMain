@@ -35,8 +35,8 @@ jobs:
         run: sf org login jwt --json --alias DevHub 
                 --set-default --set-default-dev-hub 
                 --username "${{ secrets.SF_CICD_USERNAME }}" 
-                --keyfile /home/runner/work/game-force/game-force/server.key 
-                --client-id "${{ secrets.SF_CICD_CONSUMERKEY }}"
+                --keyfile ./server.key 
+                --clientid ${{ secrets.SF_CICD_CONSUMERKEY }}
       # Pushing sourche to Scratch org
       - name: Push source to Scratch Org
         run: sf project deploy start
